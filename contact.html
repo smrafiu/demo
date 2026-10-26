@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Initiate Collaboration — AETHERIA Spatial Lab</title>
+  <meta name="description" content="Get in touch with Aetheria Spatial Lab to engineer next-gen interfaces, spatial web apps, or enterprise design systems." />
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%238b5cf6'/%3E%3Cstop offset='50%25' stop-color='%23ec4899'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%23070814'/%3E%3Cpath d='M32 10 L52 22 L52 42 L32 54 L12 42 L12 22 Z' fill='none' stroke='url(%23g)' stroke-width='4' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='32' r='8' fill='url(%23g)' opacity='0.9'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg-deep: #060713;
+      --bg-surface: #0b0d1e;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.11);
+      --glass-border-hover: rgba(255, 255, 255, 0.28);
+      --glass-blur: blur(28px) saturate(190%);
+      --glass-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+      --text-main: #f3f4fd;
+      --text-secondary: #9aa1c2;
+      --text-muted: #626a8d;
+      --accent-violet: #8b5cf6;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --accent-sky: #38bdf8;
+      --accent-emerald: #10b981;
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 26px;
+      --radius-pill: 9999px;
+      --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    .viewport-bg { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .liquid-orb { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.3; }
+    .orb-1 { width: 650px; height: 650px; background: radial-gradient(circle, var(--accent-violet) 0%, transparent 70%); top: -10%; left: -5%; }
+    .orb-2 { width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%); bottom: 0%; right: -5%; }
+    .grid-overlay {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* Nav */
+    .nav-container { position: fixed; top: 20px; left: 0; right: 0; z-index: 1000; padding: 0 1.5rem; display: flex; justify-content: center; }
+    .nav-pill {
+      max-width: 1140px; width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1.4rem; background: rgba(11, 13, 30, 0.85); backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-pill); box-shadow: var(--glass-shadow);
+    }
+    .brand-link { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 700; }
+    .logo-emblem { width: 36px; height: 36px; }
+    .brand-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; }
+    .nav-menu { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
+    .nav-item a { text-decoration: none; color: var(--text-secondary); font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+    .nav-item a:hover, .nav-item a.active { color: #fff; font-weight: 600; }
+    .btn-nav-cta {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.85), rgba(236, 72, 153, 0.85));
+      color: #fff; padding: 8px 18px; border-radius: var(--radius-pill); font-size: 0.86rem; font-weight: 600;
+      text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Page Header */
+    .page-header { padding-top: 10rem; padding-bottom: 3.5rem; text-align: center; max-width: 800px; margin: 0 auto; }
+    .kicker-pill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-sky); margin-bottom: 1.2rem;
+    }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem; }
+    .text-gradient { background: linear-gradient(135deg, #ffffff 30%, var(--accent-sky) 80%, var(--accent-violet) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-desc { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.7; }
+
+    /* Contact Box */
+    .contact-container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 6rem; }
+    .contact-card-main {
+      background: rgba(14, 16, 38, 0.65); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-lg);
+      backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow); padding: 3.5rem;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 3.5rem;
+    }
+    .contact-details-side h3 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 1rem; }
+    .contact-details-side p { font-size: 0.96rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 2rem; }
+
+    .direct-link-row { display: flex; align-items: center; gap: 14px; margin-bottom: 1.2rem; text-decoration: none; color: #fff; }
+    .icon-box {
+      width: 44px; height: 44px; border-radius: 12px; background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12); display: flex; align-items: center; justify-content: center;
+      color: var(--accent-sky);
+    }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; }
+    .form-control {
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm); padding: 12px 16px; color: #fff; font-size: 0.92rem; outline: none;
+    }
+    .form-control:focus { border-color: var(--accent-cyan); background: rgba(255, 255, 255, 0.08); }
+    textarea.form-control { min-height: 120px; resize: vertical; }
+    .btn-submit {
+      background: linear-gradient(135deg, #7c3aed, #db2777); color: #fff; padding: 14px 28px;
+      border-radius: var(--radius-pill); font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 0.5rem;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed; bottom: 24px; right: 24px; background: #0b0d1e; border: 1px solid var(--accent-emerald);
+      border-radius: var(--radius-pill); padding: 12px 24px; color: #fff; font-size: 0.88rem; font-weight: 600;
+      display: none; align-items: center; gap: 10px; z-index: 2000;
+    }
+    .toast-box.show { display: flex; }
+
+    footer { border-top: 1px solid rgba(255, 255, 255, 0.08); background: #04050d; padding: 4rem 1.5rem 3rem; text-align: center; }
+    .footer-copy { font-size: 0.85rem; color: var(--text-muted); }
+
+    @media (max-width: 860px) {
+      .contact-card-main { grid-template-columns: 1fr; padding: 2rem; }
+      .nav-menu { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-bg">
+    <div class="liquid-orb orb-1"></div>
+    <div class="liquid-orb orb-2"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <!-- Navigation -->
+  <header class="nav-container">
+    <nav class="nav-pill">
+      <a href="index.html#hero" class="brand-link">
+        <div class="logo-emblem">
+          <svg viewBox="0 0 48 48" fill="none">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8b5cf6"/><stop offset="50%" stop-color="#ec4899"/><stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <path d="M24 4 L42 14 L42 34 L24 44 L6 34 L6 14 Z" stroke="url(#logoGrad)" stroke-width="3" stroke-linejoin="round" fill="rgba(139, 92, 246, 0.08)"/>
+            <path d="M24 14 L34 20 L34 28 L24 34 L14 28 L14 20 Z" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1.8" fill="url(#logoGrad)" fill-opacity="0.3"/>
+            <circle cx="24" cy="24" r="4" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span class="brand-name">AETHERIA</span>
+      </a>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html#hero">Home</a></li>
+        <li class="nav-item"><a href="index.html#ecosystem">Ecosystem</a></li>
+        <li class="nav-item"><a href="index.html#services">Capabilities</a></li>
+        <li class="nav-item"><a href="work.html">Selected Works</a></li>
+        <li class="nav-item"><a href="about.html">About Studio</a></li>
+        <li class="nav-item"><a href="index.html#calculator">Estimator</a></li>
+        <li class="nav-item"><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <a href="contact.html" class="btn-nav-cta">Initiate Project</a>
+    </nav>
+  </header>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="kicker-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Client Collaboration Portal</span>
+    </div>
+    <h1>Let's Build Something <span class="text-gradient">Iconic Together</span></h1>
+    <p class="page-desc">Tell us about your technical roadmap and target delivery date. Our founding principals reply with an architectural proposal within 24 hours.</p>
+  </div>
+
+  <main class="contact-container">
+    <div class="contact-card-main">
+      <div class="contact-details-side">
+        <h3>Direct Line to Founders</h3>
+        <p>We work with a select cohort of 4 to 6 enterprise partners each quarter to guarantee uncompromising craftsmanship.</p>
+
+        <a href="mailto:hello@aetheria.studio" class="direct-link-row">
+          <div class="icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:600;">hello@aetheria.studio</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Inquiries & RFPs</div>
+          </div>
+        </a>
+
+        <div class="direct-link-row">
+          <div class="icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:600;">Studio Hubs</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">San Francisco • London • Tokyo</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--accent-emerald);">
+          STATUS: CURRENTLY ACCEPTING Q2/Q3 SPRINT CLIENTS
+        </div>
+      </div>
+
+      <div>
+        <form class="contact-form" onsubmit="handleContact(event)">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" class="form-control" placeholder="Alex Thorne" required />
+          </div>
+          <div class="form-group">
+            <label>Work Email *</label>
+            <input type="email" class="form-control" placeholder="alex@company.com" required />
+          </div>
+          <div class="form-group">
+            <label>Architecture Domain *</label>
+            <select class="form-control">
+              <option>Spatial & 3D Web (VisionOS / WebGL)</option>
+              <option>Fullstack Enterprise Platform</option>
+              <option>Autonomous Design System</option>
+              <option>AI Agent Canvas & Streaming</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Project Scope Overview *</label>
+            <textarea class="form-control" placeholder="Summarize your product requirements..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span>Send Proposal Brief</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast-box" id="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span>Brief transmitted! Our team will reach out within 24 hours.</span>
+  </div>
+
+  <footer>
+    <p class="footer-copy">© 2026 AETHERIA SPATIAL LAB. Engineered with precision & craft. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function handleContact(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span>Transmitting...</span>';
+      setTimeout(() => {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Dispatched!</span>';
+        btn.style.background = 'linear-gradient(135deg, #10b981, #06b6d4)';
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+        e.target.reset();
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = '';
+        }, 3500);
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
